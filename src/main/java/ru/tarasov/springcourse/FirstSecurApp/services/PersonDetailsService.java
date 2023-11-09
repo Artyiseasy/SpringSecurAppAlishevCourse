@@ -28,7 +28,7 @@ public class PersonDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("user not found");
 
 
-            return new PersonDetails(person.get());
+        return new PersonDetails(person.get());
 
     }
 }

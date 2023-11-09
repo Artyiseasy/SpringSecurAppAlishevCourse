@@ -1,6 +1,6 @@
 package ru.tarasov.springcourse.FirstSecurApp.controller;
 
-import org.springframework.boot.autoconfigure.pulsar.PulsarProperties;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ public class HelloController {
     @GetMapping("/showuserinfo")
     public String showUserInfo(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         System.out.println(personDetails.getPerson());
 
         return "hello";
