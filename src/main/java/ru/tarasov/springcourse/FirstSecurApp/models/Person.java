@@ -22,12 +22,16 @@ public class Person {
     private int year_of_birthday;
     @Column(name = "password")
     private String password;
+    @Column(name = "role")
+    private String role;
 
     public Person() {}
 
     public Person(String username, int year_of_birthday) {
         this.username = username;
         this.year_of_birthday = year_of_birthday;
+
+
     }
 
     public int getId() {return id;}
@@ -42,6 +46,9 @@ public class Person {
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
 
+    public String getRole() {return role;}
+    public void setRole(String role) {this.role = role;}
+
     @Override
     public String toString() {
         return "Person{" +
@@ -49,6 +56,8 @@ public class Person {
                 ", username='" + username + '\'' +
                 ", year_of_birthday=" + year_of_birthday +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
+
 }

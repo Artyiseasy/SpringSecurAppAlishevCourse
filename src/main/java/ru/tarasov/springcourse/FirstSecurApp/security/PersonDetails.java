@@ -2,10 +2,12 @@ package ru.tarasov.springcourse.FirstSecurApp.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.tarasov.springcourse.FirstSecurApp.models.Person;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /*
     Когда мы работаем с security мы не напрямую общаемся с сущностью, а через класс обертку
@@ -20,7 +22,7 @@ public class PersonDetails implements UserDetails {
     @Override
     //метод возвращает коллекцию тех прав, которые доступны после авторизации
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(person.getRole()));
     }
 
     @Override

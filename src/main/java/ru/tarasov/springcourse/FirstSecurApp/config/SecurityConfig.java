@@ -8,11 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.PasswordManagementConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +22,7 @@ import ru.tarasov.springcourse.FirstSecurApp.security.CustomAuthenticationProvid
 //анотация дает понять, что этот класс предназначен для конфигурации spring.security
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true )
 public class SecurityConfig {
 
 
@@ -56,8 +56,8 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
        
                 http.authorizeRequests()
-                .requestMatchers("/auth/login", "auth/registration", "/error").permitAll()
-                .anyRequest().authenticated()
+                        .requestMatchers("/auth/login", "auth/registration", "/error").permitAll()
+                        .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/auth/login")

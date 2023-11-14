@@ -16,6 +16,7 @@ public class RegistrationService {
     public RegistrationService(PeopleRepositories peopleRepositories, PasswordEncoder passwordEncoder) {
         this.peopleRepositories = peopleRepositories;
         this.passwordEncoder = passwordEncoder;
+
     }
 
 
@@ -23,7 +24,9 @@ public class RegistrationService {
     @Transactional
     public void register(Person person){
       person.setPassword(passwordEncoder.encode(person.getPassword()));
+      person.setRole("ROLE_USER");
     peopleRepositories.save(person);
+
 
     }
 
