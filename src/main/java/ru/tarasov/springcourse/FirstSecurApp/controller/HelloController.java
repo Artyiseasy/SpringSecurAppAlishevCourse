@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.tarasov.springcourse.FirstSecurApp.security.PersonDetails;
 import ru.tarasov.springcourse.FirstSecurApp.services.AdminService;
 
@@ -24,12 +25,13 @@ public class HelloController {
     }
 
     @GetMapping("/showuserinfo")
+    @ResponseBody
     public String showUserInfo(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         System.out.println(personDetails.getPerson());
 
-        return "hello";
+        return personDetails.getUsername();
     }
     @GetMapping("/admin")
     public String adminPage(){

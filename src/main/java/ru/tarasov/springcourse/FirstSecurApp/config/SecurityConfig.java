@@ -12,10 +12,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.tarasov.springcourse.FirstSecurApp.security.CustomAuthenticationProvider;
 
 
@@ -29,13 +31,19 @@ public class SecurityConfig {
 
     private CustomAuthenticationProvider authProvider;
     private UserDetailsService userDetailsService;
+    private final JWTFilter jwtFilter;
+
 
     @Autowired
-    public SecurityConfig(CustomAuthenticationProvider authProvider, UserDetailsService userDetailsService) {
+    public SecurityConfig(CustomAuthenticationProvider authProvider, 
+                          UserDetailsService userDetailsService, JWTFilter jwtFilter) {
         this.authProvider = authProvider;
         this.userDetailsService = userDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
+
+    
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -55,7 +63,9 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
        
-                http.authorizeRequests()
+                http
+                        .csrf(csrf -> csrf.disable())
+                        .authorizeRequests()
                         .requestMatchers("/auth/login", "auth/registration", "/error").permitAll()
                         .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
@@ -66,7 +76,10 @@ public class SecurityConfig {
                         .failureUrl("/auth/login?error"))
                         .logout((logout)->logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/auth/login"));
+                        .logoutSuccessUrl("/auth/login"))
+                        .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+               http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
     @Bean
